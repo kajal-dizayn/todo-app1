@@ -2,7 +2,7 @@ import React from "react";
 import RemoveBtn from "./RemoveBtn";
 import Link from "next/link";
 
-import { HiPencilAlt } from "react-icons/hi";
+import { HiOutlineTrash, HiPencilAlt } from "react-icons/hi";
 
 const TodoList = () => {
   return (
@@ -13,7 +13,9 @@ const TodoList = () => {
           <p>Todo description</p>
         </div>
         <div className="flex gap-2 items-center">
-          <RemoveBtn />
+          <button className="bg-red-500 text-white p-2 rounded-md">
+            <HiOutlineTrash size={24} />
+          </button>
           <Link href="/editTodo/123">
             <HiPencilAlt size={24} />
           </Link>
