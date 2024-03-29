@@ -6,7 +6,8 @@ import {
   validateEmail,
   validateUsername,
 } from "@/helpers/general.helper";
-import { useUserStore } from "@/store/user.store";
+import withAuth from "@/hoc/withAuth";
+import { User, useUserStore } from "@/store/user.store";
 import { replace } from "lodash";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -56,20 +57,23 @@ const LoginPage = () => {
     });
 
     if (userData.success && userData.data) {
-      console.log(userData.data.data, "userData.data");
-      setUser(userData.data.data);
-      localStorage.setItem("id", userData.data.data.id);
+      console.log(userData.data.data, "userData.data.data");
+
+      const mappedData: User = {
+        id: userData.data.data._id,
+        username: userData.data.data.username,
+        email: userData.data.data.email,
+        isAuthenticated: true,
+        created_at: userData.data.data.createdAt,
+        updated_at: userData.data.data.updatedAt,
+      };
+
+      setUser(mappedData);
+
+      localStorage.setItem("id", userData.data.data._id);
 
       router.push("/");
     }
-
-    // if (userData.success) {
-    //   //set user data in local storage
-    //   setUser(userData.data);
-    //   localStorage.setItem("id", userData.data.id);
-    //   console.log(userData.data.id);
-    //   router.push("/addTodo");
-    // }
   };
 
   return (
@@ -106,4 +110,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withAuth(LoginPage);

@@ -35,12 +35,11 @@ export const FetchUser = async () => {
     const response = await Axios.get("/user/fetch");
     return {
       data: response.data,
-      status: response.status,
+      success: true,
     };
   } catch (error: any) {
     return {
-      data: error.response.data,
-      status: error.response.status,
+      success: false,
     };
   }
 };

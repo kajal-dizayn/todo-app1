@@ -4,6 +4,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  isAuthenticated?: boolean;
 
   created_at: string;
   updated_at: string;

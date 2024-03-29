@@ -3,10 +3,14 @@ import axios from "@/axios";
 export const AddTodo = async (todo: any) => {
   try {
     const response = await axios.post("/todo/create", todo);
-    return response.data;
+
+    return {
+      data: response.data,
+      success: response.status === 200,
+    };
   } catch (error: any) {
     return {
-      error: error.response.data,
+      success: false,
     };
   }
 };
@@ -22,18 +26,32 @@ export const FetchTodos = async () => {
 
 export const DeleteTodo = async (id: number) => {
   try {
-    const response = await axios.delete(`/todo/delete/${id}`);
-    return response.data;
+    const response = await axios.delete("/todo/delete", {
+      params: {
+        id: id,
+      },
+    });
+    return {
+      data: response.data,
+      success: response.status === 200,
+    };
   } catch (error: any) {
-    return error.response.data;
+    return {
+      success: false,
+    };
   }
 };
 
 export const UpdateTodo = async (todo: any, id: string) => {
   try {
-    const response = await axios.post("/todo/update", todo);
-    return response.data;
-  } catch (error: any) {
-    return error.response.data;
+    const response = await axios.put(`/todo/update?id=${id}`, todo);
+    return {
+      data: response.data,
+      success: response.status === 200,
+    };
+  } catch (error) {
+    return {
+      success: false,
+    };
   }
 };
