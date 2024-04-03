@@ -9,7 +9,7 @@ import React, { useState } from "react";
 const AddTodo = () => {
   const router = useRouter();
   const { user } = useUserStore();
-  console.log(user, "user");
+
   const [formvalue, setFormValue] = useState({
     title: "",
     description: "",
@@ -27,7 +27,6 @@ const AddTodo = () => {
       description: formvalue.description,
       userId: user.id,
     });
-    console.log(data, "data");
 
     if (data.success) {
       router.push("/");

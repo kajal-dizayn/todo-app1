@@ -12,7 +12,7 @@ const TodoList = ({ todo }: { todo: Todo }) => {
 
   const handleRemove = async () => {
     const data = await todoActions.DeleteTodo(id);
-    console.log(data, "data");
+
     if (data.success) {
       removeTodo(todo);
     }

@@ -6,7 +6,7 @@ import React from "react";
 
 const Profile = () => {
   const { user, removeUser } = useUserStore();
-  console.log(user, "user");
+
   const router = useRouter();
 
   const handleLogout = () => {

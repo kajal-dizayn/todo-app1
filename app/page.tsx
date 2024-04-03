@@ -17,7 +17,6 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       const todosData = await todoActions.FetchTodos();
-      console.log(todosData, "todosData.data");
       //map data to store
       const mappedData: Todo[] = todosData.map((item) => {
         return {
@@ -29,8 +28,15 @@ const Home = () => {
           updated_at: item.updatedAt,
         };
       });
-      console.log(mappedData, "mappedData");
-      setTodos(mappedData);
+
+      // also filter the data based on the user id
+      const id = localStorage.getItem("id");
+
+      const filteredData = mappedData.filter((item) => {
+        return item.userId === id;
+      });
+
+      setTodos(filteredData);
     })();
   }, []);
 

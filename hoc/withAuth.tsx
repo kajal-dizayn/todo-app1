@@ -12,7 +12,6 @@ const withAuth = (
 
     useEffect(() => {
       const id = localStorage.getItem("id");
-      console.log(user.id, "id");
 
       // const id = user.id;
 

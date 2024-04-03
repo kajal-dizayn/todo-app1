@@ -12,7 +12,7 @@ const EditTodo = (context: { params: { id: any } }) => {
   const router = useRouter();
 
   const { updateTodo, todos } = useTodoStore();
-  console.log(id, "id");
+
   //fetch router
 
   const [formvalue, setFormValue] = useState({
@@ -28,7 +28,6 @@ const EditTodo = (context: { params: { id: any } }) => {
   };
 
   const todo = todos.find((todo) => todo.id === id);
-  console.log(todo, "todo");
 
   useEffect(() => {
     if (todo) {
@@ -41,7 +40,7 @@ const EditTodo = (context: { params: { id: any } }) => {
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
-    console.log(formvalue);
+
     const data = await todoActions.UpdateTodo(
       {
         title: formvalue.title,

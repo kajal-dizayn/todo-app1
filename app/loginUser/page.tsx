@@ -57,8 +57,6 @@ const LoginPage = () => {
     });
 
     if (userData.success && userData.data) {
-      console.log(userData.data.data, "userData.data.data");
-
       const mappedData: User = {
         id: userData.data.data._id,
         username: userData.data.data.username,

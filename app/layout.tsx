@@ -43,7 +43,7 @@ export default function RootLayout({
     (async () => {
       const userData = await userActions.FetchUser();
 
-      const users = userData.data.filter((item) => item._id === id);
+      const users = userData.data.filter((item: any) => item._id === id);
       console.log(users[0], "----");
 
       const mappedData: User = {
