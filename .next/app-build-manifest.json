@@ -15,6 +15,17 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/loginUser/page.js"
+    ],
+    "/addTodo/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/addTodo/page.js"
+    ],
+    "/addTodo/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/addTodo/layout.css",
+      "static/chunks/app/addTodo/layout.js"
     ]
   }
 }

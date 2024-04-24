@@ -7,6 +7,10 @@ import Navbar from "@/components/navbar";
 import { useEffect } from "react";
 import { User, useUserStore } from "@/store/user.store";
 import { todoActions, userActions } from "@/actions";
+import { io } from "socket.io-client";
+
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGNlYmRmMzAyY2UyYzkyZjgzNjcyYiIsInJvbGUiOiJVU0VSIiwic2Vzc2lvbklkIjoiNmM3NmM4ZTEtNGU5Zi00ZTcwLTgxNjQtNDUyYzZkMGYyYTg2IiwiaWF0IjoxNzEyODI5MzA5LCJleHAiOjE3MTI4MzY1MDl9.RdKXzw9HVhJZU0CRNhy9484P5xJVnU6HkRiQMvCgnNI";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,41 +27,63 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   useEffect(() => {
-    const socket = new WebSocket("ws://localhost:3003");
-    socket.onopen = () => {
-      console.log("WebSocket is connected");
-    };
-    socket.onmessage = (message) => {
-      console.log("Message: ", message);
-    };
+    const socket = io("http://localhost:8888", {
+      reconnection: true,
+      transports: ["websocket"],
+      query: { token }, // used for auth
+    });
 
-    // Clean up the connection when the component is unmounted
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+
+    socket.on("message", (message) => {
+      console.log(message);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
     return () => {
-      socket.close();
+      socket.disconnect();
     };
   }, []);
+  // const socket = io(BASE_URL, {
+  //   reconnect: true,
+  //   transports: ["websocket"],
+  //   query: { token: getToken() }, // used for auth
+  // });
 
-  const { setUser } = useUserStore();
-  useEffect(() => {
-    const id = localStorage.getItem("id");
-    (async () => {
-      const userData = await userActions.FetchUser();
+  // const socket = io(process.env.NEXT_PUBLIC_BASE_URL || "", {
+  //   transports: ["websocket"],
+  //   upgrade: false,
+  //   query: {
+  //     token: localStorage.getItem("token"),
+  //   },
+  // });
 
-      const users = userData.data.filter((item: any) => item._id === id);
-      console.log(users[0], "----");
+  // const { setUser } = useUserStore();
+  // useEffect(() => {
+  //   const id = localStorage.getItem("id");
+  //   (async () => {
+  //     const userData = await userActions.FetchUser();
 
-      const mappedData: User = {
-        id: users[0]._id,
-        username: users[0].username,
-        email: users[0].email,
-        isAuthenticated: true,
-        created_at: users[0].createdAt,
-        updated_at: users[0].updatedAt,
-      };
+  //     const users = userData.data.filter((item: any) => item._id === id);
+  //     console.log(users[0], "----");
 
-      setUser(mappedData);
-    })();
-  }, []);
+  //     const mappedData: User = {
+  //       id: users[0]._id,
+  //       username: users[0].username,
+  //       email: users[0].email,
+  //       isAuthenticated: true,
+  //       created_at: users[0].createdAt,
+  //       updated_at: users[0].updatedAt,
+  //     };
+
+  //     setUser(mappedData);
+  //   })();
+  // }, []);
   return (
     <html lang="en">
       <body className={inter.className}>
