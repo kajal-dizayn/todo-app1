@@ -3,14 +3,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
-import { useEffect } from "react";
-import { User, useUserStore } from "@/store/user.store";
-import { todoActions, userActions } from "@/actions";
-import { io } from "socket.io-client";
 
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGNlYmRmMzAyY2UyYzkyZjgzNjcyYiIsInJvbGUiOiJVU0VSIiwic2Vzc2lvbklkIjoiNmM3NmM4ZTEtNGU5Zi00ZTcwLTgxNjQtNDUyYzZkMGYyYTg2IiwiaWF0IjoxNzEyODI5MzA5LCJleHAiOjE3MTI4MzY1MDl9.RdKXzw9HVhJZU0CRNhy9484P5xJVnU6HkRiQMvCgnNI";
+import VideoCall from "@/components/videocall";
+import App from "@/components/final";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,29 +21,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    const socket = io("http://localhost:8888", {
-      reconnection: true,
-      transports: ["websocket"],
-      query: { token }, // used for auth
-    });
+  // useEffect(() => {
+  //   const socket = io("http://localhost:8888", {
+  //     reconnection: true,
+  //     transports: ["websocket"],
+  //     query: { token }, // used for auth
+  //   });
 
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
+  //   socket.on("connect", () => {
+  //     console.log("Connected to server");
+  //   });
 
-    socket.on("message", (message) => {
-      console.log(message);
-    });
+  //   socket.on("message", (message) => {
+  //     console.log(message);
+  //   });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
+  //   socket.on("disconnect", () => {
+  //     console.log("Disconnected from server");
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
   // const socket = io(BASE_URL, {
   //   reconnect: true,
   //   transports: ["websocket"],
@@ -89,7 +84,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="max-w-3xl mx-auto p-4">
           {/* <Navbar /> */}
-          <div className="mt-8">{children}</div>
+          <VideoCall />
+
+          {/* <div className="mt-8">{children}</div> */}
         </div>
       </body>
     </html>

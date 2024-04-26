@@ -1,17 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MeetingProvider } from "@videosdk.live/react-sdk";
 import MeetingView from "./meetingView";
 import JoinScreen from "./joinscreen";
+import { authToken, createMeeting } from "./api";
 
 export default function VideoCall() {
-  const authToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlrZXkiOiJjNjIzYWJiYi1mZWFiLTRhOWYtOTczMy00Njc3MzczN2JlMmMiLCJwZXJtaXNzaW9ucyI6WyJhbGxvd19qb2luIl0sImlhdCI6MTcxMzk0MDYwMiwiZXhwIjoxNzEzOTQ3ODAyfQ.H6vBpgTcCcvGfTnfASa_4q5oLHaPuaDYxXIVaDmMQyI";
   const [meetingId, setMeetingId] = useState<string | null>(null);
+  const [name, setName] = useState("");
 
-  //Getting the meeting id by calling the api we just wrote
+  // Function to handle name change, for example from an input field
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
   const getMeetingAndToken = async (id?: string) => {
-    const meetingId = "d2r9-o0w8-4g9u";
+    const meetingId =
+      id == null ? await createMeeting({ token: authToken }) : id;
     setMeetingId(meetingId);
   };
 
@@ -19,20 +24,34 @@ export default function VideoCall() {
     setMeetingId(null);
   };
 
-  return authToken && meetingId ? (
-    <MeetingProvider
-      config={{
-        meetingId,
-        micEnabled: true,
-        webcamEnabled: true,
-        name: "John Doe",
-        debugMode: false,
-      }}
-      token={authToken}
-    >
-      <MeetingView meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
-    </MeetingProvider>
-  ) : (
-    <JoinScreen getMeetingAndToken={getMeetingAndToken} />
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Enter your name"
+        value={name}
+        onChange={handleNameChange}
+      />
+      <br />
+      <br />
+
+      {meetingId ? (
+        <MeetingProvider
+          config={{
+            meetingId,
+            micEnabled: true,
+            webcamEnabled: true,
+            name: name,
+            debugMode: false,
+            mode: "CONFERENCE",
+          }}
+          token={authToken}
+        >
+          <MeetingView meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
+        </MeetingProvider>
+      ) : (
+        <JoinScreen getMeetingAndToken={getMeetingAndToken} />
+      )}
+    </div>
   );
 }

@@ -2,6 +2,7 @@ import { useMeeting } from "@videosdk.live/react-sdk";
 import { useState } from "react";
 import Controls from "./Controls";
 import { ParticipantView } from "./participantView";
+import PresenterView from "./presenterView";
 
 function MeetingView({
   onMeetingLeave,
@@ -11,7 +12,7 @@ function MeetingView({
   meetingId: string;
 }) {
   const [joined, setJoined] = useState<string | null>(null);
-  const { join, participants } = useMeeting({
+  const { join, participants, presenterId } = useMeeting({
     //callback for when meeting is joined successfully
     onMeetingJoined: () => {
       setJoined("JOINED");
@@ -32,7 +33,7 @@ function MeetingView({
       {joined && joined == "JOINED" ? (
         <div>
           <Controls />
-          //For rendering all the participants in the meeting
+
           {[...participants.keys()].map((participantId) => (
             <ParticipantView
               participantId={participantId}
@@ -45,6 +46,8 @@ function MeetingView({
       ) : (
         <button onClick={joinMeeting}>Join</button>
       )}
+
+      {presenterId && <PresenterView presenterId={presenterId} />}
     </div>
   );
 }
