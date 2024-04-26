@@ -3,10 +3,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
-import { useEffect } from "react";
-import { User, useUserStore } from "@/store/user.store";
-import { todoActions, userActions } from "@/actions";
+
+import VideoCall from "@/components/videocall";
+import App from "@/components/final";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,48 +21,72 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  useEffect(() => {
-    const socket = new WebSocket("ws://localhost:3003");
-    socket.onopen = () => {
-      console.log("WebSocket is connected");
-    };
-    socket.onmessage = (message) => {
-      console.log("Message: ", message);
-    };
+  // useEffect(() => {
+  //   const socket = io("http://localhost:8888", {
+  //     reconnection: true,
+  //     transports: ["websocket"],
+  //     query: { token }, // used for auth
+  //   });
 
-    // Clean up the connection when the component is unmounted
-    return () => {
-      socket.close();
-    };
-  }, []);
+  //   socket.on("connect", () => {
+  //     console.log("Connected to server");
+  //   });
 
-  const { setUser } = useUserStore();
-  useEffect(() => {
-    const id = localStorage.getItem("id");
-    (async () => {
-      const userData = await userActions.FetchUser();
+  //   socket.on("message", (message) => {
+  //     console.log(message);
+  //   });
 
-      const users = userData.data.filter((item: any) => item._id === id);
-      console.log(users[0], "----");
+  //   socket.on("disconnect", () => {
+  //     console.log("Disconnected from server");
+  //   });
 
-      const mappedData: User = {
-        id: users[0]._id,
-        username: users[0].username,
-        email: users[0].email,
-        isAuthenticated: true,
-        created_at: users[0].createdAt,
-        updated_at: users[0].updatedAt,
-      };
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
+  // const socket = io(BASE_URL, {
+  //   reconnect: true,
+  //   transports: ["websocket"],
+  //   query: { token: getToken() }, // used for auth
+  // });
 
-      setUser(mappedData);
-    })();
-  }, []);
+  // const socket = io(process.env.NEXT_PUBLIC_BASE_URL || "", {
+  //   transports: ["websocket"],
+  //   upgrade: false,
+  //   query: {
+  //     token: localStorage.getItem("token"),
+  //   },
+  // });
+
+  // const { setUser } = useUserStore();
+  // useEffect(() => {
+  //   const id = localStorage.getItem("id");
+  //   (async () => {
+  //     const userData = await userActions.FetchUser();
+
+  //     const users = userData.data.filter((item: any) => item._id === id);
+  //     console.log(users[0], "----");
+
+  //     const mappedData: User = {
+  //       id: users[0]._id,
+  //       username: users[0].username,
+  //       email: users[0].email,
+  //       isAuthenticated: true,
+  //       created_at: users[0].createdAt,
+  //       updated_at: users[0].updatedAt,
+  //     };
+
+  //     setUser(mappedData);
+  //   })();
+  // }, []);
   return (
     <html lang="en">
       <body className={inter.className}>
         <div className="max-w-3xl mx-auto p-4">
           {/* <Navbar /> */}
-          <div className="mt-8">{children}</div>
+          <VideoCall />
+
+          {/* <div className="mt-8">{children}</div> */}
         </div>
       </body>
     </html>
